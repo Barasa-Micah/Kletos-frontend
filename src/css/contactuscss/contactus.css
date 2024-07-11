@@ -1,0 +1,171 @@
+/* Full-screen styling */
+.container {
+  flex-direction: column;
+  /* margin: auto; */
+  /* margin-top: 150px; */
+  padding-bottom: 5px;
+  /* border-radius: 95px; */
+  min-height: 3%;
+  width: 60vw;
+  height: 620px;
+  background-color: white;
+  border-radius: 10px;
+  /* padding: 30px 40px; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tittle {
+  font-size: 24px;
+  align-self: flex-start;
+  color: goldenrod;
+  /* margin-bottom: 10px; */
+}
+
+.paragraph {
+  align-content: left;
+  font-size: 15px;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+  /* margin-bottom: 20px; */
+}
+
+.form {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.user_name,
+.user_email,
+.message {
+  width: 100%;
+  max-width: 345px;
+  height: 46px;
+  background: transparent;
+  border: 2px solid lightblue;
+  border-radius: 2%;
+  margin-top: 35px;
+  /* color: goldenrod; */
+  padding: 10px;
+}
+
+.message {
+  height: 73px;
+}
+
+.button {
+  width: 100%;
+  max-width: 345px;
+  height: 40px;
+  background: black;
+  border: none;
+  margin-top: 40px;
+  border-radius: 2px;
+  font-size: 15px;
+  color: white;
+  cursor: pointer;
+}
+
+.details {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: black;
+  font-size: medium;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.image {
+  width: 100%;
+  max-width: 450px;
+  margin: 10px auto;
+}
+
+.image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .container {
+    width: 80%;
+    height: auto;
+  }
+  .form{
+    width: 65%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .image {
+    max-width: 300px;
+  }
+
+  .user_name,
+  .user_email,
+  .message {
+    max-width: 300px;
+  }
+
+  .button {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 95%;
+    height: auto;
+  }
+
+  .image {
+    max-width: 250px;
+  }
+
+  .user_name,
+  .user_email,
+  .message {
+    max-width: 250px;
+  }
+
+  .button {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .image {
+    max-width: 200px;
+  }
+
+  .user_name,
+  .user_email,
+  .message {
+    max-width: 200px;
+  }
+
+  .button {
+    max-width: 200px;
+  }
+}

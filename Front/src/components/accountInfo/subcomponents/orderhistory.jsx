@@ -1,84 +1,110 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 import "../../../css/myaccount/orderhistory.css";
 
-function EyeIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
-}
+const OrderHistory = () => {
+  const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
-export default function OrderHistory() {
-  const orders = [
-    { id: "#12345", date: "2023-04-15", total: "kes 176.00", status: "Delivered" },
-    { id: "#12346", date: "2023-10-20", total: "kes 429.79", status: "Processing" },
-    { id: "#12347", date: "2024-02-10", total: "kes 7000.00", status: "Cancelled" }
-  ];
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/orders/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch orders");
+      }
+      // Sort orders by created_at date in descending order
+      const sortedOrders = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setOrders(sortedOrders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
   const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-      case "delivered":
-        return "text-green-600";
-      case "processing":
-        return "text-yellow-600";
-      case "cancelled":
-        return "text-red-600";
+    switch (status) {
+      case "Delivered":
+        return "Delivered";
+      case "Processing":
+        return "Processing"; // Waiting to be delivered
+      case "Cancelled":
+        return "Cancelled";
+      case "Pending":
+        return "Pending"; // Waiting for payment
       default:
         return "";
     }
   };
 
+  const OrderItem = ({ item, status }) => {
+    return (
+      <div className="order-item">
+        <img src={item.image_url} alt={`Image of ${item.product_name}`} className="order-item-image" />
+        <div className="order-item-details">
+          <span className="order-item-name">{item.product_name}</span>
+          <span className="order-item-qty">{`x${item.quantity}`}</span>
+          <span className="order-item-price">{`Ksh: ${item.price}`}</span>
+        </div>
+        {status === "Pending" && (
+          <button className="pay-now-HIST" onClick={() => handlePayNow(item.order_id)}>Pay Now</button>
+        )}
+      </div>
+    );
+  };
+
+  const handlePayNow = (orderId) => {
+    navigate("/checkout", { state: { orderId } });
+  };
+
   return (
-    <div className="order-history">
-      <h2 className="text-xl font-semibold mb-4">Order History</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Order #</th>
-            <th>Date</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>
-                <a href="#" className="text-primary hover:underline">
-                  {order.id}
-                </a>
-              </td>
-              <td>{order.date}</td>
-              <td>{order.total}</td>
-              <td>
-                <span className={`status ${getStatusColor(order.status)}`}>
-                  {order.status}
-                </span>
-              </td>
-              <td>
-                <button size="sm">
-                  <EyeIcon className="h-4 w-4" />
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="order-table-summary">
+      {orders.length > 0 && (
+        <h2 className="header-order-hist">Order History</h2>
+      )}
+      {orders.length === 0 ? (
+        <div className="displayed-no-order">
+          <div className="pan-effect">
+            <img
+              src="no-orders.jpg"
+              alt="No orders placed"
+              className="empty-order-image"
+            />
+          </div>
+          <p>You have placed no orders yet!</p>
+        </div>
+      ) : (
+        orders.map((order) => (
+          <div key={order.id} className="order-history-item">
+            <div className="order-hist-summary">
+              <div className="order-summary-header">
+                <span className="order-id">Order #{order.id}</span>
+                <span className="order-date">{new Date(order.created_at).toLocaleDateString()}</span>
+                <span className="order-total">{`Ksh: ${order.total_price}`}</span>
+                <span className={`order-status ${getStatusColor(order.status)}`}>{order.status}</span>
+              </div>
+              <div className="order-items">
+                {order.items.map((item) => (
+                  <OrderItem key={item.product_id} item={item} status={order.status} />
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
-}
+};
+
+export default OrderHistory;

@@ -5,10 +5,12 @@ import HeroSection from "../components/homepagecomponents/HeroSection";
 import HMCategories from "../components/homepagecomponents/HMCategories";
 // import FPContainer from "../components/homepagecomponents/FPContainer";
 import FeaturedProducts from "../components/homepagecomponents/FeaturedProducts";
-import HMExplore from "../components/homepagecomponents/HMExplore";
+// import HMExplore from "../components/homepagecomponents/HMExplore";
 import NavBar from "../components/layout/NavBar";
-import NavBar2 from "../components/layout/NavBar2";
 import Footer from "../components/layout/Footer";
+import HomeVideo from "../components/homepagecomponents/HomeVideo";
+import HLatest from "../components/homepagecomponents/HLatest";
+import HFeaturedLinks from "../components/homepagecomponents/HFeaturedLinks";
 
 const homepage = () => {
   return (
@@ -18,7 +20,9 @@ const homepage = () => {
         <HeroSection />
         <HMCategories />
         <FeaturedProducts />
-        <HMExplore />
+        <HomeVideo />
+        <HLatest />
+        <HFeaturedLinks />
         <Footer />
       </div>
     </>

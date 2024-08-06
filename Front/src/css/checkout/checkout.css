@@ -418,7 +418,7 @@ body{
   .field-input:focus-within,
   .row-input-frame:focus-within,
   .row-input-shipping:focus-within{
-    border-color: black;
+    border-color: rgba(148, 148, 148, 0.644);
     border-width: 2.5px;
   }
 
@@ -454,13 +454,12 @@ body{
   
   .change-button {
     position: absolute;
-    right: 25px;
+    right: 0;
     font-size: 13px;
     background-color: transparent;
     color: rgb(23, 115, 176);
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
     cursor: pointer;
   }
 
@@ -545,3 +544,32 @@ body{
     height: 18px;
     fill: grey;
   }
+
+  /* edit mode  */
+.default-cursor {
+  cursor: default;
+}
+
+.pointer-cursor {
+  cursor: pointer;
+}
+
+/* Hide the default dropdown arrow */
+.select-hidden {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-hidden::-ms-expand {
+  display: none;
+}
+
+
+.unavailable-text {
+  font-size: .85em;
+  color: red;
+  padding-left: 2em;
+  margin-left: 0.5em;
+  text-align: center;
+}

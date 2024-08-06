@@ -1,18 +1,87 @@
-import React, { useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/myaccount/myaccount.css";
 import MyAccount from "./subcomponents/myaccount";
 import OrderHistory from "./subcomponents/orderhistory";
 import SavedItems from "./subcomponents/wishlist";
 import NavBar from "../../components/layout/NavBar";
-import Footer from "../../components/layout/Footer";
 
 export default function MainAccount() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
-  const [activeComponent, setActiveComponent] = useState("myaccount");
+  const [isMobileMenuOpen] = useState(true);
+  const [activeComponent, setActiveComponent] = useState("orderhistory");
+  const [userDetails, setUserDetails] = useState({ full_name: "Username", email: "youremail@gmail.com" });
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Set active component based on URL path
+    const path = location.pathname;
+    if (path.includes("/orders")) {
+      setActiveComponent("orderhistory");
+    } else if (path.includes("/myaccount")) {
+      setActiveComponent("myaccount");
+    } else if (path.includes("/wishlist")) {
+      setActiveComponent("wishlist");
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // Fetch user profile details on component mount
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/profile/', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserDetails({
+            full_name: data.full_name,
+            email: data.email
+          });
+        } else {
+          const data = await response.json();
+          alert('Error: ' + data.error);
+        }
+      } catch (error) {
+        alert('Failed to fetch user details: ' + error.message);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleSidebarClick = (component) => {
     setActiveComponent(component);
-    // setIsMobileMenuOpen(false); // Close the mobile menu after selection
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('token');
+        alert('Logged out successfully');
+        navigate('/');
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        alert('Error: ' + data.error);
+      }
+    } catch (error) {
+      alert('Logout failed: ' + error.message);
+    }
   };
 
   return (
@@ -22,31 +91,32 @@ export default function MainAccount() {
         {/* Sidebar */}
         <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
           {/* Sidebar content */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="avator-container">
             <div className="avatar">
-              <img src="/placeholder-user.jpg" alt="User Avatar" className="avatar-image" />
+              <img src="user.bmp" alt="User" className="avatar-image" />
               <div className="avatar-fallback">User</div>
             </div>
             <div className={isMobileMenuOpen ? 'hidden' : ''}>
-              <h2 className="component-title-sidebar">User</h2>
-              <p className="component-subtitle-sidebar">email@example.com</p>
+              <h2 className="component-title-sidebar">{userDetails.full_name}</h2>
+              <p className="component-subtitle-sidebar">{userDetails.email}</p>
             </div>
           </div>
           {/* Navigation links */}
+          <div className="head-sidebar">My panel</div>
           <nav className="nav-link">
-            <a onClick={() => handleSidebarClick("orderhistory")} className="custom-link">
+            <a onClick={() => handleSidebarClick("orderhistory")} className={`custom-link ${activeComponent === "orderhistory" ? "active" : ""}`}>
               <PackageIcon className="icon" />
               <span className="label">Orders</span>
             </a>
-            <a onClick={() => handleSidebarClick("wishlist")} className="custom-link">
+            <a onClick={() => handleSidebarClick("wishlist")} className={`custom-link ${activeComponent === "wishlist" ? "active" : ""}`}>
               <HeartIcon className="icon" />
               <span className="label">Wishlist</span>
             </a>
-            <a onClick={() => handleSidebarClick("myaccount")} className="custom-link">
+            <a onClick={() => handleSidebarClick("myaccount")} className={`custom-link ${activeComponent === "myaccount" ? "active" : ""}`}>
               <UserIcon className="icon" />
               <span className="label">Account</span>
             </a>
-            <a className="custom-link">
+            <a onClick={handleLogout} className="custom-link">
               <LogOutIcon className="icon" />
               <span className="label">Logout</span>
             </a>
@@ -56,24 +126,6 @@ export default function MainAccount() {
         {/* Main content container */}
         <div className="component-container">
           <div className="component-inner-container">
-            <div className="component-header">
-              <div className="component-header-content">
-                <div className="avatar">
-                  <img src="/placeholder-user.jpg" alt="User Avatar" className="avatar-image" />
-                  <div className="avatar-fallback">User</div>
-                </div>
-                <div>
-                  <h1 className="component-title">User</h1>
-                  <p className="component-subtitle">email@example.com</p>
-                </div>
-              </div>
-              <button
-                className="icon-button"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                <MenuIcon className="menu-icon" />
-              </button>
-            </div>
             <div className="component-body">
               {activeComponent === "orderhistory" && <OrderHistory />}
               {activeComponent === "myaccount" && <MyAccount />}
@@ -82,7 +134,6 @@ export default function MainAccount() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
@@ -157,23 +208,8 @@ function LogOutIcon(props) {
     >
       <path d="M18 3h-13a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-14a2 2 0 0 0-2-2z" />
       <line x1="8" y1="12" x2="16" y2="12" />
-      <line x1="12" y1="8" x2="12" y2="16" />
-    </svg>
-  );
-}
-
-function MenuIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      stroke="#d9d9d9"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 12h18M3 6h18M3 18h18" />
+      <line x1="12" y1="16" x2="16" y2="12" />
+      <line x1="12" y1="8" x2="16" y2="12" />
     </svg>
   );
 }

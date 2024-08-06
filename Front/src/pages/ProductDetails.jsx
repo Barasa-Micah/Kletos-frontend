@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import NavBar from "../components/layout/NavBar";
 import Footer from "../components/layout/Footer";
+import NavBar from "../components/layout/NavBar";
+import RelatedProducts from "../components/productdetails/RelatedProducts";
 import "../css/productdetails/productdetails.css";
 
 const ProductDetails = () => {
@@ -12,11 +13,12 @@ const ProductDetails = () => {
     const [error, setError] = useState(null);
     const [addingToCart, setAddingToCart] = useState(false);
     const [wishlist, setWishlist] = useState(false);
+    const [relatedProducts, setRelatedProducts] = useState([]);
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/products/products/${id}`, {
+                const response = await fetch(`http://127.0.0.1:5000/products/products/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -30,6 +32,22 @@ const ProductDetails = () => {
                 const data = await response.json();
                 setProduct(data);
                 setLoading(false);
+                
+                // Fetch related products
+                const relatedResponse = await fetch(`http://127.0.0.1:5000/products/related/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!relatedResponse.ok) {
+                    throw new Error(`HTTP error! status: ${relatedResponse.status}`);
+                }
+
+                const relatedData = await relatedResponse.json();
+                setRelatedProducts(relatedData);
+
             } catch (error) {
                 console.error('Error fetching product:', error);
                 setError(error);
@@ -154,10 +172,12 @@ const ProductDetails = () => {
                         <img src={product.image_url} alt={product.name} />
                     </section>
                     <section className="pd-details">
-                        <h1>{product.name}</h1>
-                        <h2>
-                            PRICE: <span>Kes {product.price}</span>
-                        </h2>
+                        <div className="pdd-titles">
+                            <h1>{product.name}</h1>
+                            <h2>
+                                <span>Ksh: {product.price}</span>
+                            </h2>
+                        </div>
                         <p>
                             {product.description}
                         </p>
@@ -173,7 +193,7 @@ const ProductDetails = () => {
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 512 512"
-                                    fill={wishlist ? "rgb(168, 111, 35)" : "rgb(168, 111, 35)"}
+                                    fill={wishlist ? "#8b4513" : "#8b4513"}
                                 >
                                     {wishlist ? (
                                         <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
@@ -185,6 +205,7 @@ const ProductDetails = () => {
                         </div>
                     </section>
                 </div>
+                <RelatedProducts products={relatedProducts} />
             </div>
             <Footer />
         </>

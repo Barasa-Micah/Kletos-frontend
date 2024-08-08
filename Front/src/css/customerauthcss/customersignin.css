@@ -1,0 +1,248 @@
+.sign-in-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.customer-sign-in-component {
+  width: 40%;
+  min-height: 300px;
+  padding: 22px;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  transition: transform 0.5s ease-in-out;
+  position: relative;
+  z-index: 1001;
+  pointer-events: all;
+}
+
+.customer-sign-in-component.drop-down {
+  transform: translateY(0);
+}
+
+.csc-heading {
+  margin-bottom: 20px;
+}
+
+.csc-heading h1 {
+  font-size: 2rem;
+  color: #8b4513;
+  text-align: center;
+}
+
+.csc-inputs {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.csc-input-div {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.csc-input-div label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.csc-input-div input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.forgot-password {
+  display: block;
+  text-align: right;
+  color: #8b4513;
+  text-decoration: none;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: rgba(255, 0, 0, 0.911);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.csc-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.csc-buttons button {
+  width: 100%;
+  padding: 10px;
+  background-color: #8b4513;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.register-section {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}
+
+.register-action {
+  color: #8b4513;
+  cursor: pointer;
+}
+
+.register-action:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .customer-sign-in-component {
+    width: 90%;
+  }
+}
+
+.back-to-sign-in {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #8b4513;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.back-to-sign-in:hover {
+  text-decoration: underline;
+}
+
+.reset-password-message {
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #555;
+  transition: color 0.3s ease;
+  z-index: 1002;
+}
+
+.close-btn:hover {
+  color: #8b4513;
+}
+
+.close-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.loader {
+  width: 100%;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  border: 4px solid transparent;
+  overflow: hidden;
+}
+
+.loader:before {
+  border: 1px solid #8b4513;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.loader .loaderBar {
+  position: absolute;
+  border-radius: 10px;
+  top: 0;
+  left: -100%;
+  bottom: 0;
+  background: #8b451391;
+  width: 100%;
+  animation: borealisBar 1s linear infinite;
+}
+
+@keyframes borealisBar {
+  0% {
+    left: -100%;
+    width: 100%;
+  }
+  50% {
+    left: 0;
+    width: 100%;
+  }
+  100% {
+    left: 100%;
+    width: 100%;
+  }
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+/* eye toggle */
+.csc-input-div {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 40px;
+}
+
+.eye-icon {
+  position: absolute;
+  fill: rgba(128, 128, 128, 0.705);
+  right: 10px;
+  top: 50%;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.eye-icon:hover{
+  fill: #8b451393;
+}

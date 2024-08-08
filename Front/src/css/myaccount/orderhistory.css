@@ -1,0 +1,158 @@
+.header-order-hist {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #616060;
+  margin-bottom: 1rem;
+}
+
+.order-history-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.order-hist-summary{
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background-color: rgb(247, 245, 245);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-table-summary {
+  display: flex;
+  flex-direction: column;
+  /* background-color: rgb(248, 246, 246); */
+}
+
+.order-summary-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-id {
+  font-weight: bold;
+}
+
+.order-date {
+  color: #555;
+}
+
+.order-total {
+  font-weight: bold;
+}
+
+.order-status {
+  padding: 0.3em 0.5em;
+  border-radius: .3rem;
+  cursor: default;
+}
+
+.order-status.Delivered {
+  background-color: #34d399;
+  color: white;
+}
+
+.order-status.Processing {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.order-status.Cancelled {
+  background-color: #ef4444;
+  color: white;
+}
+
+.order-status.Pending {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.order-items {
+  margin-top: 10px;
+}
+
+.order-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.order-item-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  object-fit: cover;
+  display: block;
+}
+
+.order-item-details {
+  margin-bottom: 10px;
+  padding-left: 2em;
+  gap: .4em;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-item-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.order-item-qty {
+  color: #555;
+}
+
+.order-item-price{
+  color: green;
+  font-weight: 600;
+}
+
+.displayed-no-order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-order-image {
+  height: 14rem;
+  animation: pan 2s forwards; /* Adjust duration and timing as needed */
+}
+
+@keyframes pan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.displayed-no-order p {
+  color: #a7a6a6;
+  font-size: 16px;
+  margin: 0;
+}
+
+.pay-now-HIST {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  height: 3em;
+  padding: 0px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pay-now-HIST:hover {
+  background-color: #0056b3;
+}
